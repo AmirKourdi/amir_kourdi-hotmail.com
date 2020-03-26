@@ -1,0 +1,13 @@
+SELECT
+day_date as DATE,
+period_hour_key AS PERIOD_HOUR,
+COUNT(distinct subscriber_key) as NUMBER_OF_MSISDN ,
+CAST(SUM(volume_in/1024/1024/1024) AS DECIMAL(100,2)) as VOLUME_IN_GB,
+CAST(SUM(volume_out/1024/1024/1024) AS DECIMAL(100,2)) as VOLUME_OUT_GB,
+CAST((SUM(volume_in/1024/1024/1024) + SUM(volume_out/1024/1024/1024)) AS DECIMAL(100,2)) as TOTAL_VOLUME_GB
+
+FROM  PROD.DWH_FACT_CONV_AGG_HOUR
+
+WHERE to_char(day_date,'YYYY-MM-DD') = to_char(getdate(),'YYYY-MM-DD')
+GROUP BY 1,2
+ORDER BY 1,2 ASC;
